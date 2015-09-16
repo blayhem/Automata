@@ -18,12 +18,12 @@ public class Automata {
     public static String Automata(String snack, String memory){
         //UTILS
         Scanner sc = new Scanner(System.in);
-        Stack<String> stack = new Stack<>();
         //DICTIONARIES
         String[] bads = {"Not", "not", "tired", "Tired", "hungry", "Hungry", "long"};
         String[] goods = {"ine", "ood", "ok", "etter"};
         String[] begs = {"Can you", "Could you", "May you", "for me", "Would you"};
         String [] aboutYou = {"Do you", "Are you"};
+        String[] badwords = {"stupid", "erk"};
 
         //START CASE
         if(snack.equals("0")){
@@ -45,6 +45,7 @@ public class Automata {
             for (String bad : bads) if (memory.contains(bad)) return Automata("bad", memory);
             for (String good : goods) if (memory.contains(good)) return Automata("good", memory);
             for (String beg : begs) if (memory.contains(beg)) return Automata("do", memory);
+            for (String word : badwords) if (memory.contains(word)) return Automata("bw", memory);
             return Automata("notSure", memory);
         }
         System.out.println(Answer(snack));
@@ -55,15 +56,16 @@ public class Automata {
         if(memory.contains("dani") || memory.contains("Dani")) return Automata("creator", memory);
         for (String anAboutYou : aboutYou) if (memory.contains(anAboutYou)) return Automata("aboutMe",memory);
         for (String beg : begs) if (memory.contains(beg)) return Automata("do",memory);
-        if(memory.compareToIgnoreCase("spit") == 0) {
-            System.out.println(stack+"\n");
-            return null;
-        }
+        for (String word : badwords) if (memory.contains(word)) return Automata("bw", memory);
         if(memory.compareToIgnoreCase("help") == 0) return Automata("help",memory);
         if(memory.compareToIgnoreCase("no") == 0) return null;
-        else{
-            stack.push(memory);
-            return Automata("think", memory);
+        else {
+            int seed = (int) (Math.random() * 10) % 2;
+            switch (seed){
+                case 0: return Automata("think", memory);
+                case 1: return Automata("notSure", memory);
+                default: return Automata("think", memory);
+            }
         }
     }
 
@@ -92,6 +94,7 @@ public class Automata {
             case "aboutMe": return "I don't really know much about me...";
             case "creator": return "Dani is my creator, he's nice";
             case "think": return "Please give me some time to think about that.";
+            case "bw": return "Please do not say those things";
             case "help": return "Remember that I can stop asking you if you say no :)";
         }
         return null;
